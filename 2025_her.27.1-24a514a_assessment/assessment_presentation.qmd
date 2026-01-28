@@ -1,0 +1,139 @@
+---
+title: "NSSHerring assessment"
+author: "Sindre Vatnehol"
+date: "2025-8-28"
+format: beamer
+editor: visual
+---
+
+## Assessment infrastructure
+
+-   During the WKBHERMAC (2025), it was decided to use the SAM infrastructure
+
+## Observation data-input, with sample uncertainty
+
+-   Catch-at-age
+    -   Ages 2-12+, since 1988
+-   IESNS, International Echosystem in the norwegian sea
+    -   Ages 3-12+, since 1996
+-   IESNS, International Echosystem in the norwegian sea (bartent sea)
+    -   Age 2, since 1991
+-   BESS, Barents sea echosystem survey
+    -   Ages 2-3, since 2004
+-   RFID
+    -   Ages 3-12+, since 2017
+-   NASF, Norwegian acoustic-trawl survey on the spawning growns
+    -   Ages 3-12+, year 1988-2008
+
+    -   Ages 3-12+, 2015 - unwards
+
+## Data signals - catch at age and IESNS
+
+![](output/figures/fig_catchsignal.png){width="100%"}
+
+![](output/figures/fig_IESNSsignal.png){width="100%"}
+
+## Data signals - BESS and IESNS - rec
+
+![](output/figures/fig_BESSsignal.png){width="100%"}
+
+![](output/figures/fig_IESNSrecsignal.png){width="100%"}
+
+## Data signals - NASF
+
+![](output/figures/fig_NASFoldsignal.png){width="100%"}
+
+![](output/figures/fig_NASFnewsignal.png){width="100%"}
+
+## Data signals - RFID
+
+![](output/figures/fig_RFIDsignal.png){width="100%"}
+
+## Model configuration - catchability
+
+| fleet/age | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12+ |
+|-----------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| IESNS     |     | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 8   |
+| BESS      | 9   | 10  |     |     |     |     |     |     |     |     |     |
+| IESNS rec | 11  |     |     |     |     |     |     |     |     |     |     |
+| NASF old  |     | 12  | 13  | 14  | 15  | 16  | 17  | 17  | 17  | 17  | 17  |
+| NASF new  |     | 18  | 19  | 20  | 21  | 22  | 23  | 24  | 25  | 26  | 26  |
+| RFID      |     | 27  | 27  | 27  | 27  | 27  | 27  | 27  | 27  | 27  | 27  |
+
+## Model configuration - Observation variance
+
+| fleet/age | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12+ |
+|-----------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| catch     | 0   | 1   | 2   | 3   | 3   | 3   | 3   | 3   | 3   | 3   | 3   |
+| IESNS     |     | 4   | 5   | 5   | 5   | 5   | 5   | 5   | 5   | 5   | 5   |
+| BESS      | 6   | 6   |     |     |     |     |     |     |     |     |     |
+| IESNS rec | 7   |     |     |     |     |     |     |     |     |     |     |
+| NASF old  |     | 8   | 9   | 10  | 10  | 10  | 10  | 10  | 10  | 10  | 10  |
+| NASF new  |     | 11  | 12  | 13  | 13  | 13  | 13  | 13  | 13  | 13  | 13  |
+| RFID      |     | 14  | 14  | 14  | 14  | 14  | 14  | 14  | 15  | 15  | 16  |
+
+## Model configuration - Other
+
+-   Fbar - range: 5-12+
+
+-   Stock recruitment: code 3
+
+-   Correlation on NASF old
+
+-   Including process error
+
+## Model - parameter: catchability
+
+![](output/figures/fig_catchability.png)
+
+## Model - parameter: observation variance
+
+![](output/figures/fig_ObservationVariance.png)
+
+## Model - parameter: rest
+
+![](output/figures/fig_rest_config.png)
+
+## Model - Dignostic: residual
+
+![](output/figures/fig_residual.png)
+
+## Model - Dignostic: residual QQplot
+
+![](output/figures/fig_residualQQ.png)
+
+<!-- ## Model - Dignostic: process residual -->
+
+<!-- ![](output/figures/fig_processresidual.png) -->
+
+<!-- ## Model - Dignostic: process residual QQplot -->
+
+<!-- ![](output/figures/fig_processresidualQQ.png) -->
+
+## Model - Dignostic: Process error
+
+![](output/figures/fig_processError.png)
+
+## Model - Dignostic: Leave out and 5 years retro
+
+![](output/figures/fig_SSB_LR.png)
+
+## Model - Dignostic: Leave out and 5 years retro
+
+![](output/figures/fig_Fbar_LR.png)
+
+## Model - Dignostic: Leave out and 5 years retro
+
+![](output/figures/fig_R_LR.png)
+
+<!-- ## Model - Dignostic: 5 year retro -->
+
+<!-- ![](output/figures/fig_retro.png) -->
+
+<!-- ## Model - Dignostic: Leave out -->
+
+<!-- ![](output/figures/fig_LO.png) -->
+
+## Model fit - final stock development
+
+![](output/figures/fig_summary.png)

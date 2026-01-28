@@ -1,0 +1,169 @@
+---
+title: "NSSHerring forecast"
+author: "Sindre Vatnehol"
+date: "2025-08-30"
+format: beamer
+editor: visual
+---
+
+## Reference points
+
+From WKMACNSSH 2026
+
+-   Blim = 2286
+-   Fmsy, Fp05 = 0.21
+-   MSY btrigger, Bpa = 3177
+
+-   Fmgt = 0.14
+-   Mgt Btrigger = 3184
+
+Noe that all F values are based on weighted F for ages 5-12+
+
+## Input data
+
+-   stock numbers from assessment that includes:
+    -   2-12+ from assessment
+    -   Recruitment (age 2) is the estimated recruitment from assessment model.
+-   Weight at age in stock:
+    -   For intermediate year, using the commercial fisheries in wintering areas in January
+    -   For forecast: average of the last 3 years
+-   Weight at age in catch:
+    -   average of the last 3 years
+-   Maturity at age:
+    -   Assumed density dependent effect
+-   Exploitation pattern:
+    -   As estimated by the assessment model
+-   Catch in intermediat year:
+    -   sum of national quotas
+
+## Infrastructure
+
+-   Assessment model is the SAM model, with configuration defined during WKBMACNSSH in 2025
+-   Forecast script is a modified version of stockassessment::forecast function made by Olav Nikolai Breivik, that includes the option of weighted F.
+-   Full stochastic forecast
+
+## Catch in intermediate year
+
+| Country        | Expected catch      | Comment         |
+|----------------|---------------------|-----------------|
+| Norway         | 252065              |                 |
+| Faroes Islands | 31679               |                 |
+| Iceland        | 62680               |                 |
+| EU             | 18310               |                 |
+| UK             | 7511                |                 |
+| Greenland      | 6255                |mean of 2022-2024|
+| Russia         | 56510               |from neafc report|
+| **SUM**        | **435010**          |                 |
+| Advice         | 401794              |                 |
+
+: Expected catch in tonnes, sum of unilateral quotas 
+
+## Predicted maturity at age
+
+![](report/figures/fig_predicted_maturity.png)
+
+## Exploitation pattern
+
+![](report/figures/Fig.4.8.1.1.png)
+
+## Basis of catch scenario
+
+```{r,, echo=FALSE,message=FALSE,warning=FALSE}
+
+load('model/forecast.Rda')
+load('model/fit.Rda')
+  
+library(knitr)
+library(kableExtra)
+library(TAF)
+taf.library("stockassessment")
+# Perform calculations
+values <- c(
+  round(median(tt_stochastic[[1]]$fbar), digits = 3),
+  round(median(tt_stochastic[[2]]$ssb) / 1000, digits = 3),
+  paste0(round(tail(rectable(fit),n=1)[1]/1000, digits = 3),' billion'),
+  paste0(round(median(exp(tt_stochastic[[2]]$sim[,1])) / 1000, digits = 3),' billion'),
+  paste0(round(median(tt_stochastic[[1]]$catch * 1000)),' t')
+)
+
+if(round(median(exp(tt_stochastic[[1]]$sim[,1])) / 1000, digits = 3)==round(median(exp(tt_stochastic[[2]]$sim[,1])) / 1000, digits = 3)){
+Notes = c('Based on ICES catches in intermediate year', 'From Assessment model',
+          'Median stochastic recruitment as computed by the assessment model',
+          'Median stochastic recruitment as computed by the assessment model',
+          'Sum of declared unilateral quotas')}else{
+Notes = c('Based on ICES catches in intermediate year', 'Estimated from assessment model',
+          'From assessment model',
+          'Median stochastic recruitment as computed by the assessment model',
+          'Sum of declared unilateral quotas')
+            
+          }
+
+# Create the table
+df <- data.frame(
+  Variable = c(paste0("F ages 5-12+ (",max(fit$data$years),")"), 
+               paste0("SSB (",max(fit$data$years)+1,")"), 
+               paste0("R age 2 (",max(fit$data$years),")"), 
+               paste0("R age 2 (",max(fit$data$years)+1,")"), 
+               paste0("Catch (",max(fit$data$years),")")),
+  Value = values,
+  Notes = Notes
+  
+)
+
+# Print the table
+kable(df, format = "markdown", col.names = c("Variable", "Value", "Notes"))%>%
+  kable_styling(font_size = 6)
+
+```
+
+## Stock development
+
+![](output/figures/fig_3yearforecast.png){width="64%"}
+
+## Catch at age forecast
+
+![](report/figures/fig_predicted_caa.png)
+
+## Catch options
+
+```{r,, echo=FALSE,message=FALSE,warning=FALSE}
+
+  
+library(knitr)
+library(kableExtra)
+
+load("model/forecast_options.Rda")
+
+
+kable(new_output[,1:4], format = "markdown")%>%
+  kable_styling(font_size = 6)
+
+kable(new_output[,c(1,5:7)], format = "markdown")%>%
+  kable_styling(font_size = 6)
+  
+```
+## Catch options Full table
+
+```{r,, echo=FALSE,message=FALSE,warning=FALSE}
+
+  
+library(knitr)
+library(kableExtra)
+
+load("model/forecast_options.Rda")
+
+
+out_table$Basis[out_table$Basis == "F=0.14"] <- "F=Fmgt"
+out_table$Basis[out_table$Basis == "F=0.21"] <- "F=Fmsy"
+
+out_table$Basis <- out_table$Finn
+out_table$Finn <- NULL
+out_table$ssb_pred<-NULL
+
+  
+kable(out_table[,1:5], format = "markdown")%>%
+  kable_styling(font_size = 6)
+
+kable(out_table[,c(1,6:9)], format = "markdown")%>%
+  kable_styling(font_size = 6)
+```
